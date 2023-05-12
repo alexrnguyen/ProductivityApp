@@ -1,0 +1,48 @@
+Calendar 
+US 01.01.01: As a user, I want to add events to my calendar
+
+US 01.02.01: As a user, I want to see events I have added to my calendar
+
+US 01.03.01: As a user, I want to be able to remove events from my calendar
+
+US 01.04.01: As a user, I want to be able to edit details about events in my calendar
+
+US 01.05.01: As a user, I want to be able to categorize events into different groups
+
+US 01.06.01: As a user, I want to be able to filter events by group
+
+To Do List
+US 02.01.01: As a user, I want to add tasks to my to-do list. Each task should have a name, status, description, and possibly a deadline
+
+US 02.02.01: As a user, I want to see tasks I have added to my to-do list
+
+US 02.03.01: As a user, I want to be able to remove tasks from my to-do list
+
+US 02.04.01: As a user, I want to be able to edit details about tasks in my to-do list
+
+US 02.05.01: As a user, I want to be able to mark tasks as completed
+
+US 02.06.01: As a user, I want to be able to organize tasks by importance
+
+Habit Tracker
+US 03.01.01: As a user, I want to add habits to my habit tracker
+
+US 03.02.01: As a user, I want to see habits I have added to my habit tracker
+
+US 03.03.01: As a user, I want to be able to remove habits from my habit tracker
+
+US 03.04.01: As a user, I want to be able to edit details about habits in my habit tracker
+
+US 03.05.01: As a user, I want to be able to mark habits as completed for the given time interval (eg. daily, weekly, etc.)
+
+US 03.06.01: As a user, I want the habit tracker to update as time passes (eg. status of daily habits should reset every day)
+
+US 03.07.01: As a user, I want to see whether I am consistently maintaining habits
+
+Notifications
+US 04.01.01: As a user, I want to be notified when deadlines are approaching and when events are coming up
+
+US 04.02.01: As a user, I want to be reminded to perform habits
+
+Privacy
+US 05.01.01: As a user, I do not want sensitive details stored on the database
