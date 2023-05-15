@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Calendar"
+        android:id="@+id/calendar"
+        android:icon="@drawable/baseline_calendar_month_24"/>
+    <item android:title="Todo"
+        android:id="@+id/todo"
+        android:icon="@drawable/baseline_checklist_24"/>
+    <item android:title="Habits"
+        android:id="@+id/habits"
+        android:icon="@drawable/baseline_check_24"/>
+</menu>
