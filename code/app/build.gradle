@@ -38,6 +38,9 @@ android {
 
 dependencies {
 
+    //Day Picker in AddHabitFragment
+    implementation 'ca.antonious:materialdaypicker:0.7.4'
+
     implementation 'androidx.core:core-ktx:1.10.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.9.0'
