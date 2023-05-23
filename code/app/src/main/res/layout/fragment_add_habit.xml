@@ -28,37 +28,8 @@
         android:layout_height="wrap_content"/>
 
     <ca.antonious.materialdaypicker.MaterialDayPicker
+        android:id="@+id/mdp_days_of_week"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_weight="1">
-
-        <Button
-            android:id="@+id/btn_cancel_add_habit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.3"
-            android:backgroundTint="#d10000"
-            android:text="Cancel"
-            android:textColor="@color/black"
-            android:textSize="12sp"
-            style="?android:attr/buttonBarButtonStyle" />
-
-        <Button
-            android:id="@+id/btn_add_habit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.3"
-            android:backgroundTint="#0cc916"
-            android:text="Add"
-            android:textColor="@color/black"
-            android:textSize="12sp"
-            style="?android:attr/buttonBarButtonStyle" />
-    </LinearLayout>
-
 
 </LinearLayout>

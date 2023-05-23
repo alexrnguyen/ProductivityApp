@@ -45,7 +45,7 @@ class HabitTracker : Fragment() {
         binding.fabAddButton.setOnClickListener {
             //Referenced: https://stackoverflow.com/questions/61948788/how-do-i-open-fragment-from-fragment-kotlin
             Log.d("FAB", "Add Clicked!")
-            var dialog = AddHabitFragment(habitArrayAdapter)
+            val dialog = AddHabitFragment(habitArrayAdapter)
 
             activity?.let { it1 -> dialog.show(it1.supportFragmentManager, "Add Habit") }
         }

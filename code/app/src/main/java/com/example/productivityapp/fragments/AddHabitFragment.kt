@@ -23,23 +23,19 @@ class AddHabitFragment(private var habitArrayAdapter: HabitArrayAdapter) : Dialo
 
     private lateinit var binding: FragmentAddHabitBinding
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        //var rootView: View = inflater.inflate(R.layout.fragment_add_habit, container, false)
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = FragmentAddHabitBinding.inflate(layoutInflater)
 
-        binding.btnAddHabit.setOnClickListener {
-            val habitToAdd = Habit(binding.etHabitName.text.toString())
-            habitArrayAdapter.addHabit(habitToAdd)
-            dismiss()
-        }
-
-        binding.btnCancelAddHabit.setOnClickListener {
-            dismiss()
-        }
-        return binding.root
+        return AlertDialog.Builder(requireContext())
+            .setView(binding.root)
+            .setTitle("Add Habit")
+            .setPositiveButton("Add") {_, _ ->
+                val daysOfWeek = binding.mdpDaysOfWeek.selectedDays
+                print(daysOfWeek.toString())
+                val habitToAdd = Habit(binding.etHabitName.text.toString(), binding.etHabitDescription.text.toString())
+                habitArrayAdapter.addHabit(habitToAdd)
+            }
+            .setNegativeButton("Cancel", null)
+            .create()
     }
 }

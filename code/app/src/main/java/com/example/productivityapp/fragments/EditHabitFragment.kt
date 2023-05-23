@@ -20,25 +20,26 @@ import com.example.productivityapp.models.Habit
  * Use the [AddHabitFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class EditHabitFragment(private var habitArrayAdapter: HabitArrayAdapter) : DialogFragment() {
+class EditHabitFragment(private var habitArrayAdapter: HabitArrayAdapter, private var position: Int) : DialogFragment() {
 
     private lateinit var binding: FragmentEditHabitBinding
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         //var rootView: View = inflater.inflate(R.layout.fragment_add_habit, container, false)
+        var habit = habitArrayAdapter.getItem(position)
         binding = FragmentEditHabitBinding.inflate(layoutInflater)
+        binding.etHabitName.setText(habit.name)
+        binding.etHabitDescription.setText(habit.description)
 
-        binding.btnSaveHabit.setOnClickListener {
-            dismiss()
-        }
-
-        binding.btnCancelAddHabit.setOnClickListener {
-            dismiss()
-        }
-        return binding.root
+        return AlertDialog.Builder(requireContext())
+            .setView(binding.root)
+            .setTitle("Edit Habit")
+            .setPositiveButton("Save") {_, _ ->
+                habit.name = binding.etHabitName.text.toString()
+                habit.description = binding.etHabitDescription.text.toString()
+                habitArrayAdapter.notifyItemChanged(position)
+            }
+            .setNegativeButton("Cancel", null)
+            .create()
     }
 }
