@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import ca.antonious.materialdaypicker.MaterialDayPicker
 import com.example.productivityapp.R
 import com.example.productivityapp.adapters.HabitArrayAdapter
 import com.example.productivityapp.databinding.FragmentAddHabitBinding
@@ -30,9 +31,14 @@ class AddHabitFragment(private var habitArrayAdapter: HabitArrayAdapter) : Dialo
             .setView(binding.root)
             .setTitle("Add Habit")
             .setPositiveButton("Add") {_, _ ->
-                val daysOfWeek = binding.mdpDaysOfWeek.selectedDays
-                print(daysOfWeek.toString())
-                val habitToAdd = Habit(binding.etHabitName.text.toString(), binding.etHabitDescription.text.toString())
+                val name = binding.etHabitName.text.toString()
+                val description = binding.etHabitDescription.text.toString()
+                val selectedDays = binding.mdpDaysOfWeek.selectedDays
+
+                /*val listOfIntervals = listOf("Daily", "Weekly", "2 times a week", "3 times a week",
+                    "4 times a week", "5 times a week", "6 times a week", "Monthly")*/
+                //binding.spinnerDurationPicker.adapter =
+                val habitToAdd = Habit(name, description, selectedDays)
                 habitArrayAdapter.addHabit(habitToAdd)
             }
             .setNegativeButton("Cancel", null)

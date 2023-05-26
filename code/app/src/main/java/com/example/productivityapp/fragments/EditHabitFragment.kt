@@ -30,6 +30,7 @@ class EditHabitFragment(private var habitArrayAdapter: HabitArrayAdapter, privat
         binding = FragmentEditHabitBinding.inflate(layoutInflater)
         binding.etHabitName.setText(habit.name)
         binding.etHabitDescription.setText(habit.description)
+        binding.mdpDaysOfWeek.setSelectedDays(habit.selectedDays)
 
         return AlertDialog.Builder(requireContext())
             .setView(binding.root)
@@ -37,6 +38,7 @@ class EditHabitFragment(private var habitArrayAdapter: HabitArrayAdapter, privat
             .setPositiveButton("Save") {_, _ ->
                 habit.name = binding.etHabitName.text.toString()
                 habit.description = binding.etHabitDescription.text.toString()
+                habit.selectedDays = binding.mdpDaysOfWeek.selectedDays
                 habitArrayAdapter.notifyItemChanged(position)
             }
             .setNegativeButton("Cancel", null)
