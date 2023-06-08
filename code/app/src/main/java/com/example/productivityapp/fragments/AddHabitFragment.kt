@@ -19,6 +19,7 @@ import ca.antonious.materialdaypicker.MaterialDayPicker
 import ca.antonious.materialdaypicker.SingleSelectionMode
 import com.example.productivityapp.R
 import com.example.productivityapp.adapters.HabitArrayAdapter
+import com.example.productivityapp.database.Database
 import com.example.productivityapp.database.DatabaseHelper
 import com.example.productivityapp.databinding.FragmentAddHabitBinding
 import com.example.productivityapp.models.Habit
@@ -81,6 +82,8 @@ class AddHabitFragment(private var habitArrayAdapter: HabitArrayAdapter) : Dialo
                 val habitToAdd = Habit(name, description, selectedDays, repetitionInterval)
 
                 //var dbHelper = DatabaseHelper(requireContext())
+                var db = Database.getInstance()
+                db?.addHabitToDB(habitToAdd)
                 habitArrayAdapter.addHabit(habitToAdd)
             }
             .setNegativeButton("Cancel", null)

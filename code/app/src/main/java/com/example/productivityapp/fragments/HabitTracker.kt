@@ -1,11 +1,6 @@
 package com.example.productivityapp.fragments
 
-import android.Manifest
 import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,16 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.RequiresApi
-import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import ca.antonious.materialdaypicker.MaterialDayPicker
 import com.example.productivityapp.R
 import com.example.productivityapp.adapters.HabitArrayAdapter
+import com.example.productivityapp.database.HabitListCallback
+import com.example.productivityapp.database.Database
 import com.example.productivityapp.databinding.FragmentHabitTrackerBinding
 import com.example.productivityapp.models.Habit
 import java.time.LocalDate
@@ -46,14 +39,15 @@ class HabitTracker : Fragment() {
         binding = FragmentHabitTrackerBinding.inflate(layoutInflater)
 
         // TODO: Need to retrieve the list of habits from a database to maintain persistent data
-        var habit1 = Habit("Test", "ff cc", listOf(MaterialDayPicker.Weekday.MONDAY, MaterialDayPicker.Weekday.TUESDAY), "Multiple Times a Week")
-        var habit2 = Habit("Habit 2", "A second test habit", MaterialDayPicker.Weekday.allDays, "Daily")
-        var testList = mutableListOf<Habit>(habit1, habit2)
-        //habitArrayAdapter = HabitArrayAdapter(mutableListOf())
-        habitArrayAdapter = HabitArrayAdapter(testList)
-
-        binding.rvHabitList.adapter = habitArrayAdapter
-        binding.rvHabitList.layoutManager = LinearLayoutManager(context)
+        val db = Database.getInstance()
+        db?.getHabitsFromDB(object : HabitListCallback {
+            override fun onGetHabits(habits: MutableList<Habit>) {
+                Log.d("Habits", habits.toString())
+                habitArrayAdapter = HabitArrayAdapter(habits)
+                binding.rvHabitList.adapter = habitArrayAdapter
+                binding.rvHabitList.layoutManager = LinearLayoutManager(context)
+            }
+        })
 
         setRecyclerViewItemTouchListener()
         return binding.root
@@ -109,6 +103,8 @@ class HabitTracker : Fragment() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
+                val db = Database.getInstance()
+                db?.deleteHabitFromDB(habitArrayAdapter.getItem(position))
                 habitArrayAdapter.removeAt(position)
                 val message = Toast.makeText(requireContext(), "Habit Deleted!", Toast.LENGTH_LONG)
                 message.show()
