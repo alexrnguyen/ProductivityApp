@@ -8,5 +8,5 @@ data class Event (
     val name: String,
     val date: LocalDate,
     val time: LocalTime,
-    val duration: Duration
+    //val duration: Duration
 )

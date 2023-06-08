@@ -2,6 +2,10 @@ package com.example.productivityapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.Fragment
 import com.example.productivityapp.databinding.ActivityMainBinding
 import com.example.productivityapp.fragments.Calendar
@@ -15,6 +19,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         //Set initial fragment to To-do List fragment
         replaceFragment(TodoList())
@@ -29,6 +34,25 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        super.onCreateOptionsMenu(menu)
+        menuInflater.inflate(R.menu.action_bar, menu)
+        val item = menu?.findItem(R.id.switch_light_dark_menu)
+        item?.setActionView(R.layout.switch_light_dark)
+
+        item?.actionView?.findViewById<SwitchCompat>(R.id.switch_light_dark_mode)
+            ?.setOnCheckedChangeListener { _, isChecked ->
+                Log.d("Switch", isChecked.toString())
+                if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_NO) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                }
+                else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                }
+            }
+        return true
     }
 
     /**

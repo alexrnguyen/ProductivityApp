@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".fragments.HabitTracker">
 
+    <TextView
+        android:id="@+id/tv_habit_tracker_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Habit Tracker"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/rv_habit_list"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_habit_list"
         android:layout_width="match_parent"
@@ -13,7 +25,7 @@
         app:layout_constraintBottom_toTopOf="@+id/fab_add_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/tv_habit_tracker_header">
 
     </androidx.recyclerview.widget.RecyclerView>
 

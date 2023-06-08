@@ -17,6 +17,14 @@ class EventList {
         }
     }
 
+    fun get(index: Int): Event {
+        return events[index]
+    }
+
+    fun size(): Int {
+        return events.size
+    }
+
     fun addEvent(eventToAdd: Event) {
         events.add(eventToAdd)
     }

@@ -12,14 +12,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import ca.antonious.materialdaypicker.MaterialDayPicker
 import com.example.productivityapp.R
 import com.example.productivityapp.adapters.HabitArrayAdapter
 import com.example.productivityapp.databinding.FragmentHabitTrackerBinding
+import com.example.productivityapp.models.Habit
 import java.time.LocalDate
 
 /**
@@ -39,11 +44,18 @@ class HabitTracker : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentHabitTrackerBinding.inflate(layoutInflater)
-        habitArrayAdapter = HabitArrayAdapter(mutableListOf())
+
+        // TODO: Need to retrieve the list of habits from a database to maintain persistent data
+        var habit1 = Habit("Test", "ff cc", listOf(MaterialDayPicker.Weekday.MONDAY, MaterialDayPicker.Weekday.TUESDAY), "Multiple Times a Week")
+        var habit2 = Habit("Habit 2", "A second test habit", MaterialDayPicker.Weekday.allDays, "Daily")
+        var testList = mutableListOf<Habit>(habit1, habit2)
+        //habitArrayAdapter = HabitArrayAdapter(mutableListOf())
+        habitArrayAdapter = HabitArrayAdapter(testList)
 
         binding.rvHabitList.adapter = habitArrayAdapter
         binding.rvHabitList.layoutManager = LinearLayoutManager(context)
 
+        setRecyclerViewItemTouchListener()
         return binding.root
     }
 
@@ -80,6 +92,30 @@ class HabitTracker : Fragment() {
             createNotificationChannel(channel)
             notify(1, remindUser())
         }*/
+    }
+
+    /**
+     * Delete a habit from the habits list when a user swipes
+     */
+    private fun setRecyclerViewItemTouchListener() {
+        val itemTouchCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                habitArrayAdapter.removeAt(position)
+                val message = Toast.makeText(requireContext(), "Habit Deleted!", Toast.LENGTH_LONG)
+                message.show()
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(itemTouchCallback)
+        itemTouchHelper.attachToRecyclerView(binding.rvHabitList)
     }
 
     fun remindUser(): Notification {

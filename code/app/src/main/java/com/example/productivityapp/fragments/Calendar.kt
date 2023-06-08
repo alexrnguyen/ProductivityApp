@@ -13,6 +13,7 @@ import com.example.productivityapp.R
 import com.example.productivityapp.adapters.HourArrayAdapter
 import com.example.productivityapp.databinding.FragmentCalendarBinding
 import com.example.productivityapp.databinding.ItemHourCellBinding
+import com.example.productivityapp.models.Event
 import com.example.productivityapp.models.HourEvent
 import java.time.*
 import java.time.format.DateTimeFormatter
@@ -51,30 +52,45 @@ class Calendar : Fragment() {
         // Display events scheduled for current date
         val hourEventList = hourEventList()
         hourArrayAdapter = HourArrayAdapter(hourEventList)
-        binding.rvEventList.adapter = hourArrayAdapter
-        binding.rvEventList.layoutManager = LinearLayoutManager(context)
+        binding.rvHourList.adapter = hourArrayAdapter
+        binding.rvHourList.layoutManager = LinearLayoutManager(context)
+        //binding.rvHourList.isNestedScrollingEnabled = true
 
+        // Update event list on date change
         binding.calendar.setOnDateChangeListener { _, year, month, day ->
             val newMonthText = Month.values()[month].toString()
             binding.tvDate.text = String.format("%s %d %d", newMonthText, day, year)
 
             // Display events schedule for new date
+            hourArrayAdapter = HourArrayAdapter(hourEventList())
+            binding.rvHourList.adapter = hourArrayAdapter
+            binding.rvHourList.setHasFixedSize(true)
+            binding.rvHourList.layoutManager = LinearLayoutManager(context)
+        }
 
+        // Add Event
+        binding.fabAddButton.setOnClickListener {
+            val dialog = AddEventFragment(hourArrayAdapter)
 
+            activity?.let { it1 -> dialog.show(it1.supportFragmentManager, "Add Event") }
         }
 
         return binding.root
     }
 
 
+    /**
+     *
+     */
     private fun hourEventList(): MutableList<HourEvent> {
         val hourEventList = mutableListOf<HourEvent>()
         for(hour in 0..23) {
             val time = LocalTime.of(hour, 0)
             Log.d("Hour", time.toString())
-            val events = EventList()
-            events.eventsForDateAndTime(Instant.ofEpochMilli(binding.calendar.date).atZone(ZoneId.systemDefault()).toLocalDate(), time)
-            val hourEvent = HourEvent(time, mutableListOf())
+            // TODO: Rather than using an empty EventList, retrieve data from the database to populate an EventList
+            val events = mutableListOf<Event>()
+            //events.eventsForDateAndTime(Instant.ofEpochMilli(binding.calendar.date).atZone(ZoneId.systemDefault()).toLocalDate(), time)
+            val hourEvent = HourEvent(time, events)
             hourEventList.add(hourEvent)
         }
         return hourEventList
