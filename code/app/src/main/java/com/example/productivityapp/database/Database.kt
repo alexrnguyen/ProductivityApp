@@ -27,7 +27,32 @@ class Database private constructor() {
     private var db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
     fun addHabitToDB(habit: Habit) {
-        db.collection("Habits").add(habit)
+        val habitToAdd = hashMapOf(
+            "name" to habit.name,
+            "description" to habit.description,
+            "selectedDays" to habit.selectedDays,
+            "repetitionInterval" to habit.repetitionInterval,
+            "isComplete" to habit.isComplete,
+            "timesCompleted" to habit.timesCompleted
+        )
+
+        db.collection("Habits").document(habit.name)
+            .set(habitToAdd)
+            .addOnCompleteListener { Log.d("DB", "DocumentSnapshot successfully written!") }
+            .addOnFailureListener { e -> Log.w("DB", "Error writing document", e) }
+    }
+
+    fun editHabit(name: String, habit: Habit) {
+        db.collection("Habits").document(name).update(
+            mapOf(
+                "name" to habit.name,
+                "description" to habit.description,
+                "selectedDays" to habit.selectedDays,
+                "repetitionInterval" to habit.repetitionInterval,
+                "isComplete" to habit.isComplete,
+                "timesCompleted" to habit.timesCompleted
+            )
+        )
     }
 
     fun getHabitsFromDB(callback: HabitListCallback) {
@@ -39,9 +64,10 @@ class Database private constructor() {
                     val name = doc.getString("name")
                     val description = doc.getString("description")
                     val repetitionInterval = doc.getString("repetitionInterval")
-                    val isComplete = doc.getBoolean("complete")
+                    val isComplete = doc.getBoolean("isComplete")
                     val timesCompleted = doc.getLong("timesCompleted")?.toInt()
                     val selectedDays = doc.get("selectedDays") as List<*>
+
 
                     val convertedDays = mutableListOf<MaterialDayPicker.Weekday>()
                     for(day in selectedDays) {
@@ -69,17 +95,15 @@ class Database private constructor() {
                             }
                         }
                     }
-                    convertedDays.toList()
-                    val habit = Habit(name!!, description!!, convertedDays, repetitionInterval!!, isComplete!!, timesCompleted!!)
+                    val habit = Habit(name!!, description!!, convertedDays.toList(), repetitionInterval!!, isComplete!!, timesCompleted!!)
                     habits.add(habit)
-                    Log.d("DB", habit.toString())
                 }
                 callback.onGetHabits(habits)
             }
         }
     }
 
-    fun deleteHabitFromDB(habitToDelete: Habit) {
-        db.collection("Habits").document().delete()
+    fun deleteHabitFromDB(name: String) {
+        db.collection("Habits").document(name).delete()
     }
 }

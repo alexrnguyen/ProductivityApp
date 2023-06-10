@@ -5,12 +5,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.productivityapp.R
+import com.example.productivityapp.adapters.TodoItemArrayAdapter
+import com.example.productivityapp.database.Database
+import com.example.productivityapp.databinding.FragmentTodoListBinding
+import com.example.productivityapp.models.TodoItem
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
@@ -18,26 +22,53 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class TodoList : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var binding: FragmentTodoListBinding
+    private lateinit var todoItemArrayAdapter: TodoItemArrayAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_todo_list, container, false)
+        binding = FragmentTodoListBinding.inflate(layoutInflater)
+        todoItemArrayAdapter = TodoItemArrayAdapter(mutableListOf())
+        binding.rvTodoList.adapter = todoItemArrayAdapter
+        binding.rvTodoList.layoutManager = LinearLayoutManager(context)
+
+        binding.fabAddButton.setOnClickListener {
+            //Referenced: https://stackoverflow.com/questions/61948788/how-do-i-open-fragment-from-fragment-kotlin
+            val dialog = AddTodoItemFragment(todoItemArrayAdapter)
+
+            activity?.let { it1 -> dialog.show(it1.supportFragmentManager, "Add To Do Item") }
+        }
+
+        setRecyclerViewItemTouchListener()
+        return binding.root
     }
 
+
+    private fun setRecyclerViewItemTouchListener() {
+        val itemTouchCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                val db = Database.getInstance()
+                db?.deleteHabitFromDB(todoItemArrayAdapter.getItem(position).name)
+                todoItemArrayAdapter.removeAt(position)
+                val message = Toast.makeText(requireContext(), "Habit Deleted!", Toast.LENGTH_LONG)
+                message.show()
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(itemTouchCallback)
+        itemTouchHelper.attachToRecyclerView(binding.rvTodoList)
+    }
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -49,12 +80,9 @@ class TodoList : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance() =
             TodoList().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+
             }
     }
 }

@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.example.productivityapp.DismissCallback
+import com.example.productivityapp.R
 import com.example.productivityapp.adapters.HabitArrayAdapter
+import com.example.productivityapp.database.Database
 import com.example.productivityapp.databinding.FragmentHabitPageBinding
 import com.example.productivityapp.models.Habit
 import java.util.*
@@ -51,6 +53,9 @@ class HabitFragment(private val habitArrayAdapter: HabitArrayAdapter, private va
 
         binding.ibCompleteButton.setOnClickListener {
             binding.pbHabitProgress.progress = habit.updateProgress()
+            val db = Database.getInstance()
+            db?.editHabit(habit.name, habit)
+            setProgressHeader()
         }
 
         return binding.root
@@ -72,6 +77,11 @@ class HabitFragment(private val habitArrayAdapter: HabitArrayAdapter, private va
         else {
             binding.pbHabitProgress.max = habit.selectedDays.size
         }
+        setProgressHeader()
+    }
+
+    private fun setProgressHeader() {
+        binding.tvProgressHeader.text = getString(R.string.progress_bar_header, habit.timesCompleted, binding.pbHabitProgress.max)
     }
 
 }

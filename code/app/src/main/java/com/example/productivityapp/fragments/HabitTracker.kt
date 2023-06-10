@@ -104,7 +104,7 @@ class HabitTracker : Fragment() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
                 val db = Database.getInstance()
-                db?.deleteHabitFromDB(habitArrayAdapter.getItem(position))
+                db?.deleteHabitFromDB(habitArrayAdapter.getItem(position).name)
                 habitArrayAdapter.removeAt(position)
                 val message = Toast.makeText(requireContext(), "Habit Deleted!", Toast.LENGTH_LONG)
                 message.show()
