@@ -46,46 +46,18 @@ class HabitTracker : Fragment() {
                 habitArrayAdapter = HabitArrayAdapter(habits)
                 binding.rvHabitList.adapter = habitArrayAdapter
                 binding.rvHabitList.layoutManager = LinearLayoutManager(context)
+
+                binding.fabAddButton.setOnClickListener {
+                    //Referenced: https://stackoverflow.com/questions/61948788/how-do-i-open-fragment-from-fragment-kotlin
+                    val dialog = AddHabitFragment(habitArrayAdapter)
+
+                    activity?.let { it1 -> dialog.show(it1.supportFragmentManager, "Add Habit") }
+                }
             }
         })
 
         setRecyclerViewItemTouchListener()
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        Log.d("Current Day", LocalDate.now().dayOfWeek.toString())
-        //Add a habit to habit list when add button is clicked
-        binding.fabAddButton.setOnClickListener {
-            //Referenced: https://stackoverflow.com/questions/61948788/how-do-i-open-fragment-from-fragment-kotlin
-            val dialog = AddHabitFragment(habitArrayAdapter)
-
-            activity?.let { it1 -> dialog.show(it1.supportFragmentManager, "Add Habit") }
-        }
-
-
-        //Sample Code for creating a notification
-        /*val channel = NotificationChannel("Habit", "Test", NotificationManager.IMPORTANCE_DEFAULT)
-        with(NotificationManagerCompat.from(this.requireContext())) {
-            if (ActivityCompat.checkSelfPermission(
-                    this@HabitTracker.requireContext(),
-                    Manifest.permission.POST_NOTIFICATIONS
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                ActivityCompat.requestPermissions(this@HabitTracker.requireActivity(), arrayOf(Manifest.permission.POST_NOTIFICATIONS), 1)
-            }
-            createNotificationChannel(channel)
-            notify(1, remindUser())
-        }*/
     }
 
     /**
@@ -98,7 +70,8 @@ class HabitTracker : Fragment() {
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean {
-                return false
+                recyclerView.adapter?.notifyItemMoved(viewHolder.adapterPosition, target.adapterPosition)
+                return true
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -108,6 +81,15 @@ class HabitTracker : Fragment() {
                 habitArrayAdapter.removeAt(position)
                 val message = Toast.makeText(requireContext(), "Habit Deleted!", Toast.LENGTH_LONG)
                 message.show()
+            }
+
+            override fun getMovementFlags(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder
+            ): Int {
+                val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
+                val swipeFlags = 0
+                return makeMovementFlags(dragFlags, swipeFlags)
             }
         }
         val itemTouchHelper = ItemTouchHelper(itemTouchCallback)
