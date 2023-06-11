@@ -58,7 +58,7 @@ class TodoList : Fragment() {
      *
      */
     private fun setRecyclerViewItemTouchListener() {
-        val itemTouchCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+        val itemTouchCallback = object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.LEFT) {
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
@@ -73,15 +73,6 @@ class TodoList : Fragment() {
                 todoItemArrayAdapter.removeAt(position)
                 val message = Toast.makeText(requireContext(), "Item Deleted!", Toast.LENGTH_LONG)
                 message.show()
-            }
-
-            override fun getMovementFlags(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder
-            ): Int {
-                val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
-                val swipeFlags = 0
-                return makeMovementFlags(dragFlags, swipeFlags)
             }
         }
         val itemTouchHelper = ItemTouchHelper(itemTouchCallback)
