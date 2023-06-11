@@ -15,4 +15,5 @@
     <string name="progress_bar_header">Completed: %1$d/%2$d Times</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="due_date_header">Due Date:</string>
 </resources>

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import com.example.productivityapp.DismissCallback
 import com.example.productivityapp.R
 import com.example.productivityapp.adapters.EventArrayAdapter
 import com.example.productivityapp.adapters.HourArrayAdapter
@@ -50,7 +51,6 @@ class AddEventFragment(private var hourArrayAdapter: HourArrayAdapter): DialogFr
 
                 hourArrayAdapter.addEventToEvents(event, hour)
                 // TODO: Implement a callback (similar to EditHabitFragment)
-
             }
             .setNegativeButton("Cancel", null)
             .create()

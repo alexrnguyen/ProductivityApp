@@ -9,6 +9,8 @@ import android.widget.Toast
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.productivityapp.DismissCallback
+import com.example.productivityapp.DismissTodoCallback
 import com.example.productivityapp.R
 import com.example.productivityapp.adapters.TodoItemArrayAdapter
 import com.example.productivityapp.database.Database
@@ -35,10 +37,15 @@ class TodoList : Fragment() {
         binding.rvTodoList.adapter = todoItemArrayAdapter
         binding.rvTodoList.layoutManager = LinearLayoutManager(context)
 
+        noItemsTextVisibility()
+
         binding.fabAddButton.setOnClickListener {
             //Referenced: https://stackoverflow.com/questions/61948788/how-do-i-open-fragment-from-fragment-kotlin
-            val dialog = AddTodoItemFragment(todoItemArrayAdapter)
-
+            val dialog = AddTodoItemFragment(todoItemArrayAdapter, object : DismissTodoCallback {
+                override fun onCallback() {
+                    noItemsTextVisibility()
+                }
+            })
             activity?.let { it1 -> dialog.show(it1.supportFragmentManager, "Add To Do Item") }
         }
 
@@ -47,6 +54,9 @@ class TodoList : Fragment() {
     }
 
 
+    /**
+     *
+     */
     private fun setRecyclerViewItemTouchListener() {
         val itemTouchCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
             override fun onMove(
@@ -59,15 +69,25 @@ class TodoList : Fragment() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
-                val db = Database.getInstance()
-                db?.deleteHabitFromDB(todoItemArrayAdapter.getItem(position).name)
                 todoItemArrayAdapter.removeAt(position)
-                val message = Toast.makeText(requireContext(), "Habit Deleted!", Toast.LENGTH_LONG)
+                val message = Toast.makeText(requireContext(), "Item Deleted!", Toast.LENGTH_LONG)
                 message.show()
             }
         }
         val itemTouchHelper = ItemTouchHelper(itemTouchCallback)
         itemTouchHelper.attachToRecyclerView(binding.rvTodoList)
+    }
+
+    /**
+     *
+     */
+    private fun noItemsTextVisibility() {
+        if(todoItemArrayAdapter.itemCount == 0) {
+            binding.tvNoItems.visibility = View.VISIBLE
+        }
+        else {
+            binding.tvNoItems.visibility = View.INVISIBLE
+        }
     }
     companion object {
         /**
