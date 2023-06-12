@@ -7,6 +7,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.example.productivityapp.interfaces.DismissTodoCallback
 import com.example.productivityapp.adapters.TodoItemArrayAdapter
+import com.example.productivityapp.database.Database
 import com.example.productivityapp.databinding.FragmentAddTodoItemBinding
 import com.example.productivityapp.models.TodoItem
 import java.time.LocalDate
@@ -41,6 +42,9 @@ class AddTodoItemFragment(private var todoItemArrayAdapter: TodoItemArrayAdapter
 
                 val todoItem = TodoItem(name, date, time)
                 todoItemArrayAdapter.addItem(todoItem)
+
+                val db = Database.getInstance()
+                db?.addTodoItemToDB(todoItem)
                 callback.onCallback()
             }
             .setNegativeButton("Cancel", null)

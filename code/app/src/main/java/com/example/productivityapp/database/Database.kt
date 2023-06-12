@@ -116,8 +116,8 @@ class Database private constructor() {
     fun addTodoItemToDB(todoItem: TodoItem) {
         val itemToAdd = hashMapOf(
             "name" to todoItem.name,
-            "dueDate" to todoItem.dueDate,
-            "dueTime" to todoItem.dueTime,
+            "dueDate" to todoItem.dueDate.toString(),
+            "dueTime" to todoItem.dueTime.toString(),
             "isComplete" to todoItem.isComplete
         )
 
@@ -134,11 +134,12 @@ class Database private constructor() {
             if (task.isSuccessful) {
                 for (doc: QueryDocumentSnapshot in task.result) {
                     val name = doc.getString("name")
-                    val dueDate = doc.get("dueDate") as LocalDate
-                    val dueTime = doc.get("dueTime") as LocalTime
+                    val dueDate = doc.get("dueDate")
+                    val dueTime = doc.get("dueTime")
                     val isComplete = doc.getBoolean("isComplete")
 
-                    val todoItem = TodoItem(name!!, dueDate, dueTime, isComplete!!)
+                    val todoItem = TodoItem(name!!, LocalDate.parse(dueDate.toString()), LocalTime.parse(dueTime.toString()), isComplete!!)
+                    Log.d("To Do Item", todoItem.toString())
                     todoItems.add(todoItem)
                 }
                 callback.onCallback(todoItems)
