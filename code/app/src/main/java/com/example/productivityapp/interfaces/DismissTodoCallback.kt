@@ -1,4 +1,4 @@
-package com.example.productivityapp
+package com.example.productivityapp.interfaces
 
 interface DismissTodoCallback {
     fun onCallback()

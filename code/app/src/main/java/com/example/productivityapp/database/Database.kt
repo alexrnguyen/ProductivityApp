@@ -2,9 +2,14 @@ package com.example.productivityapp.database
 
 import android.util.Log
 import ca.antonious.materialdaypicker.MaterialDayPicker
+import com.example.productivityapp.interfaces.HabitListCallback
+import com.example.productivityapp.interfaces.TodoItemListCallback
 import com.example.productivityapp.models.Habit
+import com.example.productivityapp.models.TodoItem
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QueryDocumentSnapshot
+import java.time.LocalDate
+import java.time.LocalTime
 
 class Database private constructor() {
 
@@ -26,6 +31,7 @@ class Database private constructor() {
 
     private var db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
+    // TODO: The code for the add/edit/delete is similar for Habits and TodoItems. Consider refactoring!!!
     fun addHabitToDB(habit: Habit) {
         val habitToAdd = hashMapOf(
             "name" to habit.name,
@@ -105,5 +111,43 @@ class Database private constructor() {
 
     fun deleteHabitFromDB(name: String) {
         db.collection("Habits").document(name).delete()
+    }
+
+    fun addTodoItemToDB(todoItem: TodoItem) {
+        val itemToAdd = hashMapOf(
+            "name" to todoItem.name,
+            "dueDate" to todoItem.dueDate,
+            "dueTime" to todoItem.dueTime,
+            "isComplete" to todoItem.isComplete
+        )
+
+        db.collection("TodoItems").document(todoItem.name)
+            .set(itemToAdd)
+            .addOnCompleteListener { Log.d("DB", "DocumentSnapshot successfully written!") }
+            .addOnFailureListener { e -> Log.w("DB", "Error writing document", e) }
+    }
+
+    fun getTodoItemsFromDB(callback: TodoItemListCallback) {
+        val todoItems = mutableListOf<TodoItem>()
+
+        db.collection("TodoItems").get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                for (doc: QueryDocumentSnapshot in task.result) {
+                    val name = doc.getString("name")
+                    val dueDate = doc.get("dueDate") as LocalDate
+                    val dueTime = doc.get("dueTime") as LocalTime
+                    val isComplete = doc.getBoolean("isComplete")
+
+                    val todoItem = TodoItem(name!!, dueDate, dueTime, isComplete!!)
+                    todoItems.add(todoItem)
+                }
+                callback.onCallback(todoItems)
+            }
+        }
+
+    }
+
+    fun deleteTodoItemFromDB(name: String) {
+        db.collection("TodoItems").document(name).delete()
     }
 }

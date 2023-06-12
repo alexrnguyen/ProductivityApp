@@ -2,23 +2,14 @@ package com.example.productivityapp.fragments
 
 import android.app.Dialog
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import com.example.productivityapp.DismissCallback
-import com.example.productivityapp.DismissTodoCallback
-import com.example.productivityapp.R
+import com.example.productivityapp.interfaces.DismissTodoCallback
 import com.example.productivityapp.adapters.TodoItemArrayAdapter
-import com.example.productivityapp.database.Database
 import com.example.productivityapp.databinding.FragmentAddTodoItemBinding
-import com.example.productivityapp.models.Habit
 import com.example.productivityapp.models.TodoItem
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.LocalTime
 
 

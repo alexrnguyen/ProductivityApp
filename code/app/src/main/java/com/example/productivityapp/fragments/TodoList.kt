@@ -9,12 +9,11 @@ import android.widget.Toast
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.productivityapp.DismissCallback
-import com.example.productivityapp.DismissTodoCallback
-import com.example.productivityapp.R
+import com.example.productivityapp.interfaces.DismissTodoCallback
 import com.example.productivityapp.adapters.TodoItemArrayAdapter
 import com.example.productivityapp.database.Database
 import com.example.productivityapp.databinding.FragmentTodoListBinding
+import com.example.productivityapp.interfaces.TodoItemListCallback
 import com.example.productivityapp.models.TodoItem
 
 
@@ -33,21 +32,27 @@ class TodoList : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentTodoListBinding.inflate(layoutInflater)
-        todoItemArrayAdapter = TodoItemArrayAdapter(mutableListOf())
-        binding.rvTodoList.adapter = todoItemArrayAdapter
-        binding.rvTodoList.layoutManager = LinearLayoutManager(context)
+        val db = Database.getInstance()
+        db?.getTodoItemsFromDB(object : TodoItemListCallback {
+            override fun onCallback(todoItems: MutableList<TodoItem>) {
+                todoItemArrayAdapter = TodoItemArrayAdapter(todoItems)
+                binding.rvTodoList.adapter = todoItemArrayAdapter
+                binding.rvTodoList.layoutManager = LinearLayoutManager(context)
 
-        noItemsTextVisibility()
+                noItemsTextVisibility()
 
-        binding.fabAddButton.setOnClickListener {
-            //Referenced: https://stackoverflow.com/questions/61948788/how-do-i-open-fragment-from-fragment-kotlin
-            val dialog = AddTodoItemFragment(todoItemArrayAdapter, object : DismissTodoCallback {
-                override fun onCallback() {
-                    noItemsTextVisibility()
+                binding.fabAddButton.setOnClickListener {
+                    //Referenced: https://stackoverflow.com/questions/61948788/how-do-i-open-fragment-from-fragment-kotlin
+                    val dialog = AddTodoItemFragment(todoItemArrayAdapter, object : DismissTodoCallback {
+                        override fun onCallback() {
+                            noItemsTextVisibility()
+                        }
+                    })
+                    activity?.let { it1 -> dialog.show(it1.supportFragmentManager, "Add To Do Item") }
                 }
-            })
-            activity?.let { it1 -> dialog.show(it1.supportFragmentManager, "Add To Do Item") }
-        }
+            }
+
+        })
 
         setRecyclerViewItemTouchListener()
         return binding.root

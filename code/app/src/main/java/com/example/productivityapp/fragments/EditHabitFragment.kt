@@ -1,24 +1,19 @@
 package com.example.productivityapp.fragments
 
 import android.app.Dialog
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import ca.antonious.materialdaypicker.DefaultSelectionMode
 import ca.antonious.materialdaypicker.SingleSelectionMode
-import com.example.productivityapp.DismissCallback
+import com.example.productivityapp.interfaces.DismissCallback
 import com.example.productivityapp.R
 import com.example.productivityapp.adapters.HabitArrayAdapter
 import com.example.productivityapp.database.Database
-import com.example.productivityapp.databinding.FragmentAddHabitBinding
 import com.example.productivityapp.databinding.FragmentEditHabitBinding
 import com.example.productivityapp.models.Habit
 

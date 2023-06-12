@@ -97,7 +97,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:backgroundTint="#E1AD01"
+        android:backgroundTint="@color/yellow"
         android:src="@drawable/baseline_check_24_green"
         android:scaleX="2"
         android:scaleY="2"

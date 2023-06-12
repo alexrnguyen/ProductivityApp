@@ -14,11 +14,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.productivityapp.R
 import com.example.productivityapp.adapters.HabitArrayAdapter
-import com.example.productivityapp.database.HabitListCallback
+import com.example.productivityapp.interfaces.HabitListCallback
 import com.example.productivityapp.database.Database
 import com.example.productivityapp.databinding.FragmentHabitTrackerBinding
 import com.example.productivityapp.models.Habit
-import java.time.LocalDate
 
 /**
  * A simple [Fragment] subclass.

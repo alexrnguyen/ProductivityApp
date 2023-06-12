@@ -6,13 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import com.example.productivityapp.DismissCallback
+import com.example.productivityapp.interfaces.DismissCallback
 import com.example.productivityapp.R
 import com.example.productivityapp.adapters.HabitArrayAdapter
 import com.example.productivityapp.database.Database
 import com.example.productivityapp.databinding.FragmentHabitPageBinding
 import com.example.productivityapp.models.Habit
-import java.util.*
 
 class HabitFragment(private val habitArrayAdapter: HabitArrayAdapter, private val pos: Int, private val callbackToTracker: DismissCallback): Fragment() {
 

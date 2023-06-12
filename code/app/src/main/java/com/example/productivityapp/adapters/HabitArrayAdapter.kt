@@ -4,9 +4,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.example.productivityapp.DismissCallback
+import com.example.productivityapp.interfaces.DismissCallback
 import com.example.productivityapp.R
 import com.example.productivityapp.databinding.ItemHabitBinding
 import com.example.productivityapp.fragments.HabitFragment

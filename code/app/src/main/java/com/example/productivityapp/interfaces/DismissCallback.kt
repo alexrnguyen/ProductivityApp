@@ -1,4 +1,4 @@
-package com.example.productivityapp
+package com.example.productivityapp.interfaces
 
 import com.example.productivityapp.models.Habit
 
